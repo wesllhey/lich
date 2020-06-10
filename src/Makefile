@@ -20,3 +20,14 @@ lexer.lex.c: lexer.l
 
 clean:
 	rm *.o lich
+
+# all: tests
+
+# tests: tests.o hash_table.o alloc.o
+# 	$(CC) -o $@ $^
+
+# %.o: %.c
+# 	$(CC) -c $^
+
+# clean:
+# 	rm *.o tests

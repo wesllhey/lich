@@ -1,4 +1,4 @@
-func main() -> int {
+func main() {
     int a := 10;
     int b := 20;
     
@@ -6,9 +6,5 @@ func main() -> int {
 }
 
 func calc(int a, int b) -> int {
-    return calc2(a, b);
-}
-
-func calc2(int a, int b) -> int {
     return a + b;
 }

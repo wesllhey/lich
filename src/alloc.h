@@ -4,11 +4,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-extern void* alloc_and_check(
+extern void *alloc_and_check(
     unsigned size);
 
-extern void** alloc_and_check_list(
-    unsigned quantity, 
+extern void **alloc_and_check_list(
+    unsigned quantity,
     unsigned size);
 
 #endif

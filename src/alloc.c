@@ -1,6 +1,6 @@
 #include "alloc.h"
 
-void* alloc_and_check(
+void *alloc_and_check(
     unsigned size)
 {
     void *pointer = malloc(size);
@@ -13,8 +13,8 @@ void* alloc_and_check(
     return pointer;
 }
 
-void** alloc_and_check_list(
-    unsigned quantity, 
+void **alloc_and_check_list(
+    unsigned quantity,
     unsigned size)
 {
     void **pointer_list = calloc(quantity, size);
@@ -22,8 +22,7 @@ void** alloc_and_check_list(
     if (!pointer_list) {
         fprintf(stderr, "Ran out of memory!\n");
         exit(1);
-    } 
+    }
 
     return pointer_list;
 }
-
