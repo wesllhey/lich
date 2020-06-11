@@ -53,8 +53,7 @@ void hash_table_put(
     if (entry) {
         if (entry->key == key) {
             entry->value = value;
-        }
-        else {
+        } else {
             // collision
             hash_table_entry *new_entry = (hash_table_entry *)alloc_and_check(sizeof(hash_table_entry));
             new_entry->next = entry->next;
@@ -64,8 +63,7 @@ void hash_table_put(
             entry->next = new_entry;
             table->size++;
         }
-    }
-    else {
+    } else {
         hash_table_entry *new_entry = (hash_table_entry *)alloc_and_check(sizeof(hash_table_entry));
         new_entry->value = value;
 
@@ -87,8 +85,7 @@ void *hash_table_get(
     hash_table_entry *entry = table->entries[index];
 
     // collision
-    while (entry && entry->key != key)
-    {
+    while (entry && entry->key != key) {
         entry = entry->next;
     }
 

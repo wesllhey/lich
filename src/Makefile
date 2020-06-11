@@ -3,31 +3,31 @@ BISON = bison
 
 CC = gcc -Wall -g
 
-all: lich
+# all: lich
 
-lich: parser.tab.o lexer.lex.o
-	$(CC) -o $@ $^ -ly -lfl
+# lich: parser.tab.o lexer.lex.o
+# 	$(CC) -o $@ $^ -ly -lfl
 
-parser.tab.o: parser.tab.c
+# parser.tab.o: parser.tab.c
 
-lexer.lex.o: lexer.lex.c
+# lexer.lex.o: lexer.lex.c
 
-parser.tab.c: parser.y
-	$(BISON) -d $^
+# parser.tab.c: parser.y
+# 	$(BISON) -d $^
 
-lexer.lex.c: lexer.l
-	$(FLEX) -o $@ $^
-
-clean:
-	rm *.o lich
-
-# all: tests
-
-# tests: tests.o hash_table.o alloc.o
-# 	$(CC) -o $@ $^
-
-# %.o: %.c
-# 	$(CC) -c $^
+# lexer.lex.c: lexer.l
+# 	$(FLEX) -o $@ $^
 
 # clean:
-# 	rm *.o tests
+# 	rm *.o lich
+
+all: tests
+
+tests: tests.o hash_table.o symbol_table.o alloc.o
+	$(CC) -o $@ $^
+
+%.o: %.c
+	$(CC) -c $^
+
+clean:
+	rm *.o tests
