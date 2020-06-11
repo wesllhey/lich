@@ -15,18 +15,18 @@ typedef struct hash_table {
     unsigned size;
 } hash_table;
 
-extern hash_table *hash_table_init();
+hash_table *hash_table_init();
 
-extern void hash_table_put(
+void hash_table_put(
     hash_table *table,
     void *key,
     void *value);
 
-extern void *hash_table_get(
+void *hash_table_get(
     hash_table *table,
     void *key);
 
-extern void hash_table_free(
+void hash_table_free(
     hash_table *table);
 
 #endif

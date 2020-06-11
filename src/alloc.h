@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-extern void *alloc_and_check(
+void *alloc_and_check(
     unsigned size);
 
-extern void **alloc_and_check_list(
+void **alloc_and_check_list(
     unsigned quantity,
     unsigned size);
 
