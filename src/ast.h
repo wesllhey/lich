@@ -3,6 +3,17 @@
 
 #include "symbol_table.h"
 
+typedef struct ast_var ast_var;
+typedef struct ast_statement ast_statement;
+typedef struct ast_statement_list ast_statement_list;
+typedef struct ast_dec ast_dec;
+
+typedef struct ast_field ast_field;
+typedef struct ast_field_list ast_field_list;
+
+typedef struct ast_function_dec_list ast_function_dec_list;
+typedef struct ast_function_dec ast_function_dec;
+
 typedef enum {
     AST_PLUS_OP,
     AST_MINUS_OP,
@@ -16,27 +27,9 @@ typedef enum {
     AST_GE_OP
 } ast_operator_type;
 
-typedef struct ast_dec {
-    unsigned position;
 
-    enum {
-        AST_FUNCTION_DEC,
-        AST_VAR_DEC
-    } kind;
 
-    union {
-        ast_function_dec_list *function;
-
-        struct {
-            symbol_table_entry *symbol;
-            symbol_table_entry *type;
-            ast_statement *stmt;
-        } var;
-    };
-
-} ast_dec;
-
-typedef struct ast_var {
+struct ast_var {
     unsigned position;
 
     enum {
@@ -53,9 +46,9 @@ typedef struct ast_var {
         } field;
     };
 
-} ast_var;
+};
 
-typedef struct ast_statement {
+struct ast_statement {
     unsigned position;
 
     enum {
@@ -84,6 +77,7 @@ typedef struct ast_statement {
 
         struct {
             ast_var *var;
+            char *name;
             ast_statement *stmt;
         } assign;
 
@@ -94,36 +88,60 @@ typedef struct ast_statement {
         } operation;
     };
 
-} ast_statement;
+};
 
-typedef struct ast_field {
+struct ast_statement_list {
+    ast_statement *head;
+    ast_statement_list *tail;
+};
+
+struct ast_dec {
+    unsigned position;
+
+    enum {
+        AST_FUNCTION_DEC,
+        AST_VAR_DEC
+    } kind;
+
+    union {
+        ast_function_dec_list *function;
+
+        struct {
+            symbol_table_entry *symbol;
+            symbol_table_entry *type;
+            ast_statement *stmt;
+        } var;
+    };
+
+};
+
+struct ast_field {
     unsigned position;
     symbol_table_entry *name, *type;
-} ast_field;
+};
 
-typedef struct ast_field_list {
+struct ast_field_list {
     unsigned position;
 
     ast_field *head;
     ast_field_list *tail;
-} ast_field_list;
+};
 
-typedef struct ast_function_dec {
+struct ast_function_dec {
     unsigned position;
     symbol_table_entry *name, *result;
     ast_field_list *params;
     ast_statement *body;
-} ast_function_dec;
+};
 
-typedef struct ast_function_dec_list {
+struct ast_function_dec_list {
     ast_function_dec *head;
     ast_function_dec_list *tail;
-} ast_function_dec_list;
+};
 
 /* var prototypes */
 ast_var *ast_simple_var(
     unsigned position,
-    ast_var *var,
     symbol_table_entry *symbol);
 
 ast_var *ast_field_var(
@@ -149,6 +167,7 @@ ast_statement *ast_op_stmt(
 ast_statement *ast_assign_stmt(
     unsigned position,
     ast_var *var,
+    char *name,
     ast_statement *stmt);
 
 /* dec prototypes */
@@ -182,5 +201,9 @@ ast_function_dec *ast_function_dec_new(
 ast_function_dec_list *ast_function_dec_list_new(
     ast_function_dec *head,
     ast_function_dec_list *tail);
+
+ast_statement_list *ast_statement_list_new(
+    ast_statement *head,
+    ast_statement_list *tail);
 
 #endif

@@ -4,7 +4,6 @@
 /* var prototypes */
 ast_var *ast_simple_var(
     unsigned position,
-    ast_var *var,
     symbol_table_entry *symbol)
 {
     ast_var *p = (ast_var *)alloc_and_check(sizeof(ast_var));
@@ -74,14 +73,16 @@ ast_statement *ast_op_stmt(
 ast_statement *ast_assign_stmt(
     unsigned position,
     ast_var *var,
+    char *name,
     ast_statement *stmt)
 {
     ast_statement *p = (ast_statement *)alloc_and_check(sizeof(ast_statement));
     p->kind = AST_ASSIGN_STMT;
     p->position = position;
+    p->assign.name = name;
     p->assign.stmt = stmt;
     p->assign.var = var;
-
+    
     return p;
 }
 
@@ -162,6 +163,17 @@ ast_function_dec_list *ast_function_dec_list_new(
     ast_function_dec_list *tail)
 {
     ast_function_dec_list *p = (ast_function_dec_list *)alloc_and_check(sizeof(ast_function_dec_list));
+    p->head = head;
+    p->tail = tail;
+
+    return p;
+}
+
+ast_statement_list *ast_statement_list_new(
+    ast_statement *head,
+    ast_statement_list *tail)
+{
+    ast_statement_list *p = (ast_statement_list *)alloc_and_check(sizeof(ast_statement_list));
     p->head = head;
     p->tail = tail;
 
