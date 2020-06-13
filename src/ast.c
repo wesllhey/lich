@@ -86,15 +86,15 @@ ast_statement *ast_assign_stmt(
     return p;
 }
 
-/* dec prototypes */
-ast_dec *ast_function_dec_stmt(
+/* dec */
+ast_dec *ast_function_dec_new(
     unsigned position,
-    ast_function_dec_list *function)
+    ast_function_list *function_list)
 {
     ast_dec *p = (ast_dec *)alloc_and_check(sizeof(ast_dec));
     p->kind = AST_FUNCTION_DEC;
     p->position = position;
-    p->function = function;
+    p->function = function_list;
 
     return p;
 }
@@ -116,7 +116,7 @@ ast_dec *ast_var_dec(
     return p;
 }
 
-/* raw prototypes */
+/* raw */
 ast_field *ast_field_new(
     unsigned position,
     symbol_table_entry *name,
@@ -141,14 +141,14 @@ ast_field_list *ast_field_list_new(
     return p;
 }
 
-ast_function_dec *ast_function_dec_new(
+ast_function *ast_function_new(
     unsigned position,
     symbol_table_entry *name,
     ast_field_list *params,
-    symbol_table_entry *result,
-    ast_statement *body)
+    ast_statement_list *body,
+    symbol_table_entry *result)
 {
-    ast_function_dec *p = (ast_function_dec *)alloc_and_check(sizeof(ast_function_dec));
+    ast_function *p = (ast_function *)alloc_and_check(sizeof(ast_function));
     p->position = position;
     p->params = params;
     p->result = result;
@@ -158,11 +158,11 @@ ast_function_dec *ast_function_dec_new(
     return p;
 }
 
-ast_function_dec_list *ast_function_dec_list_new(
-    ast_function_dec *head,
-    ast_function_dec_list *tail)
+ast_function_list *ast_function_list_new(
+    ast_function *head,
+    ast_function_list *tail)
 {
-    ast_function_dec_list *p = (ast_function_dec_list *)alloc_and_check(sizeof(ast_function_dec_list));
+    ast_function_list *p = (ast_function_list *)alloc_and_check(sizeof(ast_function_list));
     p->head = head;
     p->tail = tail;
 

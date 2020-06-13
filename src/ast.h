@@ -11,8 +11,8 @@ typedef struct ast_dec ast_dec;
 typedef struct ast_field ast_field;
 typedef struct ast_field_list ast_field_list;
 
-typedef struct ast_function_dec_list ast_function_dec_list;
-typedef struct ast_function_dec ast_function_dec;
+typedef struct ast_function_list ast_function_list;
+typedef struct ast_function ast_function;
 
 typedef enum {
     AST_PLUS_OP,
@@ -26,8 +26,6 @@ typedef enum {
     AST_GT_OP,
     AST_GE_OP
 } ast_operator_type;
-
-
 
 struct ast_var {
     unsigned position;
@@ -104,7 +102,7 @@ struct ast_dec {
     } kind;
 
     union {
-        ast_function_dec_list *function;
+        ast_function_list *function;
 
         struct {
             symbol_table_entry *symbol;
@@ -127,16 +125,16 @@ struct ast_field_list {
     ast_field_list *tail;
 };
 
-struct ast_function_dec {
+struct ast_function {
     unsigned position;
     symbol_table_entry *name, *result;
     ast_field_list *params;
-    ast_statement *body;
+    ast_statement_list *body;
 };
 
-struct ast_function_dec_list {
-    ast_function_dec *head;
-    ast_function_dec_list *tail;
+struct ast_function_list {
+    ast_function *head;
+    ast_function_list *tail;
 };
 
 /* var prototypes */
@@ -171,9 +169,9 @@ ast_statement *ast_assign_stmt(
     ast_statement *stmt);
 
 /* dec prototypes */
-ast_dec *ast_function_dec_stmt(
+ast_dec *ast_function_dec_new(
     unsigned position,
-    ast_function_dec_list *function);
+    ast_function_list *function_list);
 
 ast_dec *ast_var_dec(
     unsigned position,
@@ -191,16 +189,16 @@ ast_field_list *ast_field_list_new(
     ast_field *head,
     ast_field_list *tail);
 
-ast_function_dec *ast_function_dec_new(
+ast_function *ast_function_new(
     unsigned position,
     symbol_table_entry *name,
     ast_field_list *params,
-    symbol_table_entry *result,
-    ast_statement *body);
+    ast_statement_list *body,
+    symbol_table_entry *result);
 
-ast_function_dec_list *ast_function_dec_list_new(
-    ast_function_dec *head,
-    ast_function_dec_list *tail);
+ast_function_list *ast_function_list_new(
+    ast_function *head,
+    ast_function_list *tail);
 
 ast_statement_list *ast_statement_list_new(
     ast_statement *head,

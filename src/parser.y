@@ -1,10 +1,10 @@
 %{
-#include "ast.h"
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "ast.h"
 
-ast_statement *ast_root;
+ast_dec *ast_root;
 
 int yylex(void);
 
@@ -15,7 +15,6 @@ void yyerror(
 }
 
 %}
-
 
 %union {
     unsigned position;
@@ -29,8 +28,8 @@ void yyerror(
 
     ast_field *field;
     ast_field_list *field_list;
-    ast_function_dec *function_dec;
-    ast_function_dec_list *function_dec_list;
+    ast_function *function;
+    ast_function_list *function_list;
 }
 
 %token <string_value> IDENTIFIER INT
@@ -47,7 +46,6 @@ void yyerror(
 
 %token COMMA SEMICOLON
 
-
 %nonassoc EQ NEQ LE GE LT GT
 
 %left PLUS MINUS
@@ -55,22 +53,30 @@ void yyerror(
 %left UMINUS
     
 %type <stmt> statement statement_assign statement_operator statement_value statement_const 
+%type <function> function
+%type <function_list> function_list
 %type <stmt_list> statement_list
 %type <var> types
 
 %start program
-
 %%
 
 program:
-    program function_dec
+    program function_list { ast_root = ast_function_dec_new(0, $2); }
     |
     ;
 
-function_dec:
-    FUNC IDENTIFIER L_PAREN parameter_list R_PAREN L_BRACE statement_list R_BRACE
+function_list:
+    function { $$ = ast_function_list_new($1, NULL); }
     |
-    FUNC IDENTIFIER L_PAREN parameter_list R_PAREN ARROW types L_BRACE statement_list R_BRACE
+    function function_list { $$ = ast_function_list_new($1, $2); }
+    ;
+
+function:
+    FUNC IDENTIFIER L_PAREN parameter_list R_PAREN L_BRACE statement_list R_BRACE 
+        { $$ = ast_function_new(0, symbol_table_entry_new($2), NULL, $7, NULL); }
+    |
+    FUNC IDENTIFIER L_PAREN parameter_list R_PAREN ARROW types L_BRACE statement_list R_BRACE { $$ = NULL; }
     ;
 
 parameter_list:
@@ -152,19 +158,3 @@ statement_return:
     ;
 
 %%
-
-int main(
-    int argc, 
-    char *argv[])
-{ 
-    extern FILE *yyin;
-    ++argv; --argc;
-
-    char *file_name = argv[0];
-
-    yyin = fopen(file_name, "r");
-    
-    if (yyparse() == 0) {
-        printf("Parse Completed\n");
-    }
-}

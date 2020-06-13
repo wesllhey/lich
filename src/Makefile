@@ -5,8 +5,11 @@ CC = gcc -Wall -g
 
 all: lich
 
-lich: alloc.o hash_table.o symbol_table.o ast.o parser.tab.o lexer.lex.o
+lich: main.o alloc.o hash_table.o symbol_table.o ast.o parser.tab.o lexer.lex.o
 	$(CC) -o $@ $^ -lfl
+
+main.o: main.c
+	$(CC) -c $^
 
 alloc.o: alloc.c
 	$(CC) -c $^
@@ -31,7 +34,7 @@ lexer.lex.c: lexer.l
 	$(FLEX) -o $@ $^
 
 clean:
-	rm *.o
+	rm *.o lich
 
 # all: tests
 

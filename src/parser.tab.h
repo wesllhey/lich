@@ -80,7 +80,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 20 "parser.y" /* yacc.c:1909  */
+#line 19 "parser.y" /* yacc.c:1909  */
 
     unsigned position;
     int int_value;
@@ -93,8 +93,8 @@ union YYSTYPE
 
     ast_field *field;
     ast_field_list *field_list;
-    ast_function_dec *function_dec;
-    ast_function_dec_list *function_dec_list;
+    ast_function *function;
+    ast_function_list *function_list;
 
 #line 100 "parser.tab.h" /* yacc.c:1909  */
 };
