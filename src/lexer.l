@@ -1,11 +1,18 @@
 %{
-#define YYSTYPE char*
-
 #include <string.h>
 
+#include "ast.h"
 #include "parser.tab.h"
 
 void yyerror();
+
+int charPos=1;
+
+int yywrap(void)
+{
+    return 1;
+}
+
 %}
 
 D			[0-9]
@@ -13,8 +20,6 @@ L			[a-zA-Z_]
 
 %%
 [ \n\r\t]+        { /* Ignore whitespace */ }
-
-[0-9]+          { yylval = strdup(yytext); return NUMBER; }
 
 "{"             { return L_BRACE; }
 "}"             { return R_BRACE; }
@@ -44,4 +49,9 @@ L			[a-zA-Z_]
 "for"           { return FOR; }
 "func"          { return FUNC; }    
 
-{L}({L}|{D})*   { yylval = strdup(yytext); return IDENTIFIER; }
+"int"           { return INT; }
+
+[0-9]+	 { yylval.int_value = atoi(yytext); return NUMBER; }
+[a-zA-Z][a-zA-Z0-9_]* { yylval.string_value = strdup(yytext); return IDENTIFIER; }
+
+%%

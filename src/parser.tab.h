@@ -46,26 +46,26 @@ extern int yydebug;
   enum yytokentype
   {
     IDENTIFIER = 258,
-    RETURN = 259,
+    INT = 259,
     NUMBER = 260,
-    FUNC = 261,
-    L_BRACE = 262,
-    R_BRACE = 263,
-    L_PAREN = 264,
-    R_PAREN = 265,
-    IF = 266,
-    WHILE = 267,
-    FOR = 268,
-    EQ = 269,
-    GT = 270,
-    LT = 271,
-    GE = 272,
-    LE = 273,
-    ASSIGN = 274,
-    ARROW = 275,
-    COMMA = 276,
-    SEMICOLON = 277,
-    INT = 278,
+    RETURN = 261,
+    FUNC = 262,
+    L_BRACE = 263,
+    R_BRACE = 264,
+    L_PAREN = 265,
+    R_PAREN = 266,
+    IF = 267,
+    WHILE = 268,
+    FOR = 269,
+    EQ = 270,
+    GT = 271,
+    LT = 272,
+    GE = 273,
+    LE = 274,
+    ASSIGN = 275,
+    ARROW = 276,
+    COMMA = 277,
+    SEMICOLON = 278,
     NEQ = 279,
     PLUS = 280,
     MINUS = 281,
@@ -77,7 +77,29 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 19 "parser.y" /* yacc.c:1909  */
+
+    unsigned position;
+    int int_value;
+    char *string_value;
+
+    ast_statement *stmt;
+    ast_statement_list *stmt_list;
+    ast_dec *dec;
+    ast_var *var;
+
+    ast_field *field;
+    ast_field_list *field_list;
+    ast_function *function;
+    ast_function_list *function_list;
+
+#line 100 "parser.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
