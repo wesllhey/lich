@@ -887,7 +887,7 @@ YY_RULE_SETUP
 case 24:
 YY_RULE_SETUP
 #line 52 "lexer.l"
-{ return INT; }
+{ yylval.string_value = strdup(yytext); return INT; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP

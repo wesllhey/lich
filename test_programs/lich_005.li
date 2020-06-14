@@ -1,0 +1,10 @@
+func main() {
+    int a := 10;
+    int b := 20;
+    
+    int c := calc(a, b);
+}
+
+func calc(int a, int b) -> int {
+    return a + b;
+}

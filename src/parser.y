@@ -104,13 +104,14 @@ statement_list:
     statement separator { $$ =  ast_statement_list_new($1, NULL); }
     |
     statement separator statement_list { $$ =  ast_statement_list_new($1, $3); }
-    | { $$ = NULL; }
+    | 
+    { $$ = NULL; }
     ;
 
 statement:
     statement_assign { $$ = $1; }
     |
-    statement_operator { $$ = $1; }
+    statement_value { $$ = $1; }
     |
     statement_call
     |
@@ -122,13 +123,21 @@ statement_assign:
     ;
 
 statement_operator:
-    statement_value PLUS statement_value { $$ = ast_op_stmt(0, AST_PLUS_OP, $1, $3); }
+    statement_value PLUS statement_value %prec PLUS { $$ = ast_op_stmt(0, AST_PLUS_OP, $1, $3); }
     |
-    statement_value { $$ = $1; }
+    statement_value MINUS statement_value %prec MINUS { $$ = ast_op_stmt(0, AST_MINUS_OP, $1, $3); }
+    |
+    statement_value TIMES statement_value %prec TIMES { $$ = ast_op_stmt(0, AST_TIMES_OP, $1, $3); }
+    |
+    statement_value DIVIDE statement_value %prec DIVIDE { $$ = ast_op_stmt(0, AST_DIVIDE_OP, $1, $3); }
+    |
+    MINUS statement_value %prec UMINUS { $$ = ast_op_stmt(0, AST_MINUS_OP, ast_int_stmt(0, 0) , $2); }
     ;
 
 statement_value:
     statement_const { $$ = $1; }
+    |
+    statement_operator { $$ = $1; }
     ;
 
 statement_const:

@@ -1,7 +1,7 @@
 #include "alloc.h"
 #include "ast.h"
 
-/* var prototypes */
+/* var */
 ast_var *ast_simple_var(
     unsigned position,
     symbol_table_entry *symbol)
@@ -28,7 +28,7 @@ ast_var *ast_field_var(
     return p;
 }
 
-/* statement prototypes */
+/* statement */
 ast_statement *ast_var_stmt(
     unsigned position,
     ast_var *var)
@@ -94,7 +94,7 @@ ast_dec *ast_function_dec_new(
     ast_dec *p = (ast_dec *)alloc_and_check(sizeof(ast_dec));
     p->kind = AST_FUNCTION_DEC;
     p->position = position;
-    p->function = function_list;
+    p->function_list = function_list;
 
     return p;
 }

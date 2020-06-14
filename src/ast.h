@@ -102,7 +102,7 @@ struct ast_dec {
     } kind;
 
     union {
-        ast_function_list *function;
+        ast_function_list *function_list;
 
         struct {
             symbol_table_entry *symbol;

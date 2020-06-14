@@ -1,7 +1,9 @@
 #include <stdio.h>
-#include "ast.h"
 
+#include "ast.h"
 #include "parser.tab.h"
+
+#include "print_ast.h"
 
 extern ast_dec *ast_root;
 extern int yyparse(void);
@@ -19,5 +21,8 @@ int main(
     
     if (yyparse() == 0) {
         printf("Parse Completed\n");
+
+        print_ast_dec(stdout, ast_root, 0);
+        fprintf(stdout, "\n");
     }
 }
