@@ -8,7 +8,7 @@
 #include "ast.h"
 
 void print_ast_dec(
-    FILE *out, 
+    FILE *out,
     ast_dec *ast_root,
     int spaces);
 

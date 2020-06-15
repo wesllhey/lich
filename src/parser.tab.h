@@ -96,7 +96,9 @@ union YYSTYPE
     ast_function *function;
     ast_function_list *function_list;
 
-#line 100 "parser.tab.h" /* yacc.c:1909  */
+    ast_type *type;
+
+#line 102 "parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
