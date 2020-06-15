@@ -49,7 +49,7 @@ L			[a-zA-Z_]
 "for"           { return FOR; }
 "func"          { return FUNC; }    
 
-"int"           { return INT; }
+"int"           { yylval.string_value = strdup(yytext); return INT; }
 
 [0-9]+	 { yylval.int_value = atoi(yytext); return NUMBER; }
 [a-zA-Z][a-zA-Z0-9_]* { yylval.string_value = strdup(yytext); return IDENTIFIER; }

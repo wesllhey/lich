@@ -14,6 +14,8 @@ typedef struct ast_field_list ast_field_list;
 typedef struct ast_function_list ast_function_list;
 typedef struct ast_function ast_function;
 
+typedef struct ast_type ast_type;
+
 typedef enum {
     AST_PLUS_OP,
     AST_MINUS_OP,
@@ -26,6 +28,12 @@ typedef enum {
     AST_GT_OP,
     AST_GE_OP
 } ast_operator_type;
+
+typedef enum {
+    AST_INT_TYPE, 
+    AST_STRING_TYPE, 
+    AST_IDENTIFIER_TYPE
+} ast_type_def;
 
 struct ast_var {
     unsigned position;
@@ -74,7 +82,7 @@ struct ast_statement {
         ast_var *var;
 
         struct {
-            ast_var *var;
+            ast_type *type;
             char *name;
             ast_statement *stmt;
         } assign;
@@ -102,7 +110,7 @@ struct ast_dec {
     } kind;
 
     union {
-        ast_function_list *function;
+        ast_function_list *function_list;
 
         struct {
             symbol_table_entry *symbol;
@@ -115,7 +123,8 @@ struct ast_dec {
 
 struct ast_field {
     unsigned position;
-    symbol_table_entry *name, *type;
+    ast_type *type;
+    symbol_table_entry *name;
 };
 
 struct ast_field_list {
@@ -135,6 +144,11 @@ struct ast_function {
 struct ast_function_list {
     ast_function *head;
     ast_function_list *tail;
+};
+
+struct ast_type {
+    unsigned position;
+    ast_type_def kind;
 };
 
 /* var prototypes */
@@ -164,7 +178,7 @@ ast_statement *ast_op_stmt(
 
 ast_statement *ast_assign_stmt(
     unsigned position,
-    ast_var *var,
+    ast_type *type,
     char *name,
     ast_statement *stmt);
 
@@ -182,8 +196,8 @@ ast_dec *ast_var_dec(
 /* raw prototypes */
 ast_field *ast_field_new(
     unsigned position,
-    symbol_table_entry *name,
-    symbol_table_entry *type);
+    ast_type *type,
+    symbol_table_entry *name);
 
 ast_field_list *ast_field_list_new(
     ast_field *head,
@@ -203,5 +217,9 @@ ast_function_list *ast_function_list_new(
 ast_statement_list *ast_statement_list_new(
     ast_statement *head,
     ast_statement_list *tail);
+
+ast_type *ast_type_new(
+    unsigned position,
+    ast_type_def kind);
 
 #endif

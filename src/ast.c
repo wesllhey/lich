@@ -1,7 +1,7 @@
 #include "alloc.h"
 #include "ast.h"
 
-/* var prototypes */
+/* var */
 ast_var *ast_simple_var(
     unsigned position,
     symbol_table_entry *symbol)
@@ -28,7 +28,7 @@ ast_var *ast_field_var(
     return p;
 }
 
-/* statement prototypes */
+/* statement */
 ast_statement *ast_var_stmt(
     unsigned position,
     ast_var *var)
@@ -72,7 +72,7 @@ ast_statement *ast_op_stmt(
 
 ast_statement *ast_assign_stmt(
     unsigned position,
-    ast_var *var,
+    ast_type *type,
     char *name,
     ast_statement *stmt)
 {
@@ -81,7 +81,7 @@ ast_statement *ast_assign_stmt(
     p->position = position;
     p->assign.name = name;
     p->assign.stmt = stmt;
-    p->assign.var = var;
+    p->assign.type = type;
     
     return p;
 }
@@ -94,7 +94,7 @@ ast_dec *ast_function_dec_new(
     ast_dec *p = (ast_dec *)alloc_and_check(sizeof(ast_dec));
     p->kind = AST_FUNCTION_DEC;
     p->position = position;
-    p->function = function_list;
+    p->function_list = function_list;
 
     return p;
 }
@@ -119,8 +119,8 @@ ast_dec *ast_var_dec(
 /* raw */
 ast_field *ast_field_new(
     unsigned position,
-    symbol_table_entry *name,
-    symbol_table_entry *type)
+    ast_type *type,
+    symbol_table_entry *name)
 {
     ast_field *p = (ast_field *)alloc_and_check(sizeof(ast_field));
     p->position = position;
@@ -176,6 +176,17 @@ ast_statement_list *ast_statement_list_new(
     ast_statement_list *p = (ast_statement_list *)alloc_and_check(sizeof(ast_statement_list));
     p->head = head;
     p->tail = tail;
+
+    return p;
+}
+
+ast_type *ast_type_new(
+    unsigned position,
+    ast_type_def kind)
+{
+    ast_type *p = (ast_type *)alloc_and_check(sizeof(ast_type));
+    p->position = position;
+    p->kind = kind;
 
     return p;
 }

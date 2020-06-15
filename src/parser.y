@@ -30,6 +30,8 @@ void yyerror(
     ast_field_list *field_list;
     ast_function *function;
     ast_function_list *function_list;
+
+    ast_type *type;
 }
 
 %token <string_value> IDENTIFIER INT
@@ -56,7 +58,9 @@ void yyerror(
 %type <function> function
 %type <function_list> function_list
 %type <stmt_list> statement_list
-%type <var> types
+%type <type> type
+%type <field> parameter
+%type <field_list> parameter_list
 
 %start program
 %%
@@ -74,26 +78,27 @@ function_list:
 
 function:
     FUNC IDENTIFIER L_PAREN parameter_list R_PAREN L_BRACE statement_list R_BRACE 
-        { $$ = ast_function_new(0, symbol_table_entry_new($2), NULL, $7, NULL); }
+        { $$ = ast_function_new(0, symbol_table_entry_new($2), $4, $7, NULL); }
     |
-    FUNC IDENTIFIER L_PAREN parameter_list R_PAREN ARROW types L_BRACE statement_list R_BRACE { $$ = NULL; }
+    FUNC IDENTIFIER L_PAREN parameter_list R_PAREN ARROW type L_BRACE statement_list R_BRACE { $$ = NULL; }
     ;
 
 parameter_list:
+    parameter { $$ = ast_field_list_new($1, NULL); }
     |
-    parameter
+    parameter COMMA parameter_list { $$ = ast_field_list_new($1, $3); }
     |
-    parameter COMMA parameter_list
+    { $$ = NULL; }
     ;
 
 parameter: 
-    types IDENTIFIER
+    type IDENTIFIER { $$ = ast_field_new(0, $1, symbol_table_entry_new($2)); }
     ; 
 
-types:
-    INT { $$ = ast_simple_var(0, symbol_table_entry_new($1)); }
+type:
+    INT { $$ = ast_type_new(0, AST_INT_TYPE); }
     |
-    IDENTIFIER { $$ = ast_simple_var(0, symbol_table_entry_new($1)); }
+    IDENTIFIER { $$ = ast_type_new(0, AST_IDENTIFIER_TYPE); }
     ;
 
 separator:
@@ -101,16 +106,17 @@ separator:
     ;
 
 statement_list:
-    statement separator { $$ =  ast_statement_list_new($1, NULL); }
+    statement separator { $$ = ast_statement_list_new($1, NULL); }
     |
-    statement separator statement_list { $$ =  ast_statement_list_new($1, $3); }
-    | { $$ = NULL; }
+    statement separator statement_list { $$ = ast_statement_list_new($1, $3); }
+    | 
+    { $$ = NULL; }
     ;
 
 statement:
     statement_assign { $$ = $1; }
     |
-    statement_operator { $$ = $1; }
+    statement_value { $$ = $1; }
     |
     statement_call
     |
@@ -118,17 +124,27 @@ statement:
     ;
 
 statement_assign:
-    types IDENTIFIER ASSIGN statement { $$ = ast_assign_stmt(0, $1, $2, $4); }
+    type IDENTIFIER ASSIGN statement { $$ = ast_assign_stmt(0, $1, $2, $4); }
     ;
 
 statement_operator:
-    statement_value PLUS statement_value { $$ = ast_op_stmt(0, AST_PLUS_OP, $1, $3); }
+    statement_value PLUS statement_value %prec PLUS { $$ = ast_op_stmt(0, AST_PLUS_OP, $1, $3); }
     |
-    statement_value { $$ = $1; }
+    statement_value MINUS statement_value %prec MINUS { $$ = ast_op_stmt(0, AST_MINUS_OP, $1, $3); }
+    |
+    statement_value TIMES statement_value %prec TIMES { $$ = ast_op_stmt(0, AST_TIMES_OP, $1, $3); }
+    |
+    statement_value DIVIDE statement_value %prec DIVIDE { $$ = ast_op_stmt(0, AST_DIVIDE_OP, $1, $3); }
+    |
+    MINUS statement_value %prec UMINUS { $$ = ast_op_stmt(0, AST_MINUS_OP, ast_int_stmt(0, 0) , $2); }
     ;
 
 statement_value:
     statement_const { $$ = $1; }
+    |
+    statement_operator { $$ = $1; }
+    |
+    IDENTIFIER { $$ = ast_var_stmt(0, ast_simple_var(0, symbol_table_entry_new($1))); }
     ;
 
 statement_const:
@@ -147,7 +163,7 @@ args:
     ;
 
 arg:
-    types
+    type
     ;
 
 statement_return:
