@@ -3,6 +3,7 @@
 #include "ast.h"
 #include "parser.tab.h"
 #include "print_ast.h"
+#include  "exception_handler.h"
 
 extern ast_dec *ast_root;
 extern int yyparse(void);
@@ -19,10 +20,14 @@ int main(
 
     yyin = fopen(file_name, "r");
 
+    exception_handler_init(file_name, yyin);
+
     if (yyparse() == 0) {
         printf("Parse Completed\n");
 
         print_ast_dec(stdout, ast_root, 0);
         fprintf(stdout, "\n");
+        
+        exception_handler_free();
     }
 }

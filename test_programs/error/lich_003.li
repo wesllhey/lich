@@ -1,0 +1,8 @@
+func main() {
+    int a := 10;
+    int a := a + 1;
+}
+
+func 1 + 3() {
+    
+}

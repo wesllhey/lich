@@ -3,15 +3,17 @@
 #include <stdio.h>
 
 #include "ast.h"
+#include "exception_handler.h"
 
 ast_dec *ast_root;
 
 int yylex(void);
 
 void yyerror(
-    const char *str)
+    const char *message)
 {
-	fprintf(stderr, "error: %s\n", str);
+    exception_handler_error(exception_handler_token_position, "%s", message);
+	exit(1);
 }
 
 %}
@@ -66,7 +68,7 @@ void yyerror(
 %%
 
 program:
-    program function_list { ast_root = ast_function_dec_new(0, $2); }
+    program function_list { ast_root = ast_function_dec_new(exception_handler_token_position, $2); }
     |
     ;
 
@@ -78,7 +80,7 @@ function_list:
 
 function:
     FUNC IDENTIFIER L_PAREN parameter_list R_PAREN L_BRACE statement_list R_BRACE 
-        { $$ = ast_function_new(0, symbol_table_entry_new($2), $4, $7, NULL); }
+        { $$ = ast_function_new(exception_handler_token_position, symbol_table_entry_new($2), $4, $7, NULL); }
     |
     FUNC IDENTIFIER L_PAREN parameter_list R_PAREN ARROW type L_BRACE statement_list R_BRACE { $$ = NULL; }
     ;
@@ -92,13 +94,13 @@ parameter_list:
     ;
 
 parameter: 
-    type IDENTIFIER { $$ = ast_field_new(0, $1, symbol_table_entry_new($2)); }
+    type IDENTIFIER { $$ = ast_field_new(exception_handler_token_position, $1, symbol_table_entry_new($2)); }
     ; 
 
 type:
-    INT { $$ = ast_type_new(0, AST_INT_TYPE); }
+    INT { $$ = ast_type_new(exception_handler_token_position, AST_INT_TYPE); }
     |
-    IDENTIFIER { $$ = ast_type_new(0, AST_IDENTIFIER_TYPE); }
+    IDENTIFIER { $$ = ast_type_new(exception_handler_token_position, AST_IDENTIFIER_TYPE); }
     ;
 
 separator:
@@ -124,19 +126,20 @@ statement:
     ;
 
 statement_assign:
-    type IDENTIFIER ASSIGN statement { $$ = ast_assign_stmt(0, $1, $2, $4); }
+    type IDENTIFIER ASSIGN statement { $$ = ast_assign_stmt(exception_handler_token_position, $1, $2, $4); }
     ;
 
 statement_operator:
-    statement_value PLUS statement_value %prec PLUS { $$ = ast_op_stmt(0, AST_PLUS_OP, $1, $3); }
+    statement_value PLUS statement_value %prec PLUS { $$ = ast_op_stmt(exception_handler_token_position, AST_PLUS_OP, $1, $3); }
     |
-    statement_value MINUS statement_value %prec MINUS { $$ = ast_op_stmt(0, AST_MINUS_OP, $1, $3); }
+    statement_value MINUS statement_value %prec MINUS { $$ = ast_op_stmt(exception_handler_token_position, AST_MINUS_OP, $1, $3); }
     |
-    statement_value TIMES statement_value %prec TIMES { $$ = ast_op_stmt(0, AST_TIMES_OP, $1, $3); }
+    statement_value TIMES statement_value %prec TIMES { $$ = ast_op_stmt(exception_handler_token_position, AST_TIMES_OP, $1, $3); }
     |
-    statement_value DIVIDE statement_value %prec DIVIDE { $$ = ast_op_stmt(0, AST_DIVIDE_OP, $1, $3); }
+    statement_value DIVIDE statement_value %prec DIVIDE { $$ = ast_op_stmt(exception_handler_token_position, AST_DIVIDE_OP, $1, $3); }
     |
-    MINUS statement_value %prec UMINUS { $$ = ast_op_stmt(0, AST_MINUS_OP, ast_int_stmt(0, 0) , $2); }
+    MINUS statement_value %prec UMINUS 
+        { $$ = ast_op_stmt(exception_handler_token_position, AST_MINUS_OP, ast_int_stmt(exception_handler_token_position, 0) , $2); }
     ;
 
 statement_value:
@@ -144,11 +147,12 @@ statement_value:
     |
     statement_operator { $$ = $1; }
     |
-    IDENTIFIER { $$ = ast_var_stmt(0, ast_simple_var(0, symbol_table_entry_new($1))); }
+    IDENTIFIER 
+        { $$ = ast_var_stmt(exception_handler_token_position, ast_simple_var(exception_handler_token_position, symbol_table_entry_new($1))); }
     ;
 
 statement_const:
-    NUMBER { $$ = ast_int_stmt(0, $1); }
+    NUMBER { $$ = ast_int_stmt(exception_handler_token_position, $1); }
     ;
 
 statement_call:

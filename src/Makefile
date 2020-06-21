@@ -5,10 +5,13 @@ CC = gcc -Wall -g
 
 all: lich
 
-lich: main.o print_ast.o alloc.o hash_table.o symbol_table.o ast.o parser.tab.o lexer.lex.o
+lich: main.o exception_handler.o print_ast.o alloc.o hash_table.o symbol_table.o ast.o parser.tab.o lexer.lex.o
 	$(CC) -o $@ $^ -lfl
 
 main.o: main.c
+	$(CC) -c $^
+
+exception_handler.o: exception_handler.c
 	$(CC) -c $^
 
 print_ast.o: print_ast.c
