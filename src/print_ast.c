@@ -1,5 +1,10 @@
 #include "print_ast.h"
 
+static void print_ast_dec(
+    FILE *out,
+    ast_dec *ast_root,
+    int spaces);
+
 static void print_ast_function(
     FILE *out,
     ast_function *function,
@@ -51,7 +56,22 @@ static void print_new_line_indented(
     indent(out, spaces);
 }
 
-void print_ast_dec(
+void pint_ast_stmt_root(FILE *out,
+    ast_statement *ast_root,
+    int spaces)
+{
+    switch(ast_root->kind) {
+    case AST_DEC_STMT:
+        print_ast_dec(out, ast_root->dec, spaces);
+        break;
+    default:
+        break;
+    }
+
+    fprintf(out, "\n"); 
+}
+
+static void print_ast_dec(
     FILE *out,
     ast_dec *ast_root,
     int spaces)
@@ -64,6 +84,7 @@ void print_ast_dec(
         print_ast_function_list(out, ast_root->function_list, spaces + PRINT_AST_INDENT_FACTOR);
         print_new_line_indented(out, spaces);
         fprintf(out, "}");
+        break;
     default:
         break;
     }

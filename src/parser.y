@@ -5,7 +5,7 @@
 #include "ast.h"
 #include "exception_handler.h"
 
-ast_dec *ast_root;
+ast_statement *ast_root;
 
 int yylex(void);
 
@@ -68,7 +68,8 @@ void yyerror(
 %%
 
 program:
-    program function_list { ast_root = ast_function_dec_new(exception_handler_token_position, $2); }
+    program function_list { 
+        ast_root = ast_dec_stmt(ast_function_dec_new(exception_handler_token_position, $2)); }
     |
     ;
 

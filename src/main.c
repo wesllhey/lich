@@ -5,7 +5,8 @@
 #include "print_ast.h"
 #include  "exception_handler.h"
 
-extern ast_dec *ast_root;
+extern ast_statement *ast_root;
+
 extern int yyparse(void);
 
 int main(
@@ -25,7 +26,7 @@ int main(
     if (yyparse() == 0) {
         printf("Parse Completed\n");
 
-        print_ast_dec(stdout, ast_root, 0);
+        pint_ast_stmt_root(stdout, ast_root, 0);
         fprintf(stdout, "\n");
         
         exception_handler_free();
