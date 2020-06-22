@@ -72,7 +72,8 @@ struct ast_statement {
         AST_FOR_STMT,
         AST_BREAK_STMT,
         AST_ARRAY_STMT,
-        AST_RETURN_STMT
+        AST_RETURN_STMT,
+        AST_DEC_STMT
     } kind;
 
     union {
@@ -92,6 +93,8 @@ struct ast_statement {
             ast_statement *left;
             ast_statement *right;
         } operation;
+        
+        ast_dec *dec;
     };
 
 };
@@ -181,6 +184,9 @@ ast_statement *ast_assign_stmt(
     ast_type *type,
     char *name,
     ast_statement *stmt);
+
+ast_statement *ast_dec_stmt(
+    ast_dec *dec);
 
 /* dec prototypes */
 ast_dec *ast_function_dec_new(

@@ -70,7 +70,7 @@
 #include "ast.h"
 #include "exception_handler.h"
 
-ast_dec *ast_root;
+ast_statement *ast_root;
 
 int yylex(void);
 
@@ -487,10 +487,10 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    71,    71,    72,    76,    78,    82,    85,    89,    91,
-      93,    97,   101,   103,   107,   111,   113,   115,   119,   121,
-     123,   125,   129,   133,   135,   137,   139,   141,   146,   148,
-     150,   155,   159,   163,   165,   166,   170,   174,   176,   177
+       0,    71,    71,    73,    77,    79,    83,    86,    90,    92,
+      94,    98,   102,   104,   108,   112,   114,   116,   120,   122,
+     124,   126,   130,   134,   136,   138,   140,   142,   147,   149,
+     151,   156,   160,   164,   166,   167,   171,   175,   177,   178
 };
 #endif
 
@@ -1303,180 +1303,181 @@ yyreduce:
     {
         case 2:
 #line 71 "parser.y" /* yacc.c:1646  */
-    { ast_root = ast_function_dec_new(exception_handler_token_position, (yyvsp[0].function_list)); }
-#line 1308 "parser.tab.c" /* yacc.c:1646  */
+    { 
+        ast_root = ast_dec_stmt(ast_function_dec_new(exception_handler_token_position, (yyvsp[0].function_list))); }
+#line 1309 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 76 "parser.y" /* yacc.c:1646  */
+#line 77 "parser.y" /* yacc.c:1646  */
     { (yyval.function_list) = ast_function_list_new((yyvsp[0].function), NULL); }
-#line 1314 "parser.tab.c" /* yacc.c:1646  */
+#line 1315 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 78 "parser.y" /* yacc.c:1646  */
+#line 79 "parser.y" /* yacc.c:1646  */
     { (yyval.function_list) = ast_function_list_new((yyvsp[-1].function), (yyvsp[0].function_list)); }
-#line 1320 "parser.tab.c" /* yacc.c:1646  */
+#line 1321 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 83 "parser.y" /* yacc.c:1646  */
+#line 84 "parser.y" /* yacc.c:1646  */
     { (yyval.function) = ast_function_new(exception_handler_token_position, symbol_table_entry_new((yyvsp[-6].string_value)), (yyvsp[-4].field_list), (yyvsp[-1].stmt_list), NULL); }
-#line 1326 "parser.tab.c" /* yacc.c:1646  */
+#line 1327 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 85 "parser.y" /* yacc.c:1646  */
+#line 86 "parser.y" /* yacc.c:1646  */
     { (yyval.function) = NULL; }
-#line 1332 "parser.tab.c" /* yacc.c:1646  */
+#line 1333 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 89 "parser.y" /* yacc.c:1646  */
+#line 90 "parser.y" /* yacc.c:1646  */
     { (yyval.field_list) = ast_field_list_new((yyvsp[0].field), NULL); }
-#line 1338 "parser.tab.c" /* yacc.c:1646  */
+#line 1339 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 91 "parser.y" /* yacc.c:1646  */
+#line 92 "parser.y" /* yacc.c:1646  */
     { (yyval.field_list) = ast_field_list_new((yyvsp[-2].field), (yyvsp[0].field_list)); }
-#line 1344 "parser.tab.c" /* yacc.c:1646  */
+#line 1345 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 93 "parser.y" /* yacc.c:1646  */
+#line 94 "parser.y" /* yacc.c:1646  */
     { (yyval.field_list) = NULL; }
-#line 1350 "parser.tab.c" /* yacc.c:1646  */
+#line 1351 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 97 "parser.y" /* yacc.c:1646  */
+#line 98 "parser.y" /* yacc.c:1646  */
     { (yyval.field) = ast_field_new(exception_handler_token_position, (yyvsp[-1].type), symbol_table_entry_new((yyvsp[0].string_value))); }
-#line 1356 "parser.tab.c" /* yacc.c:1646  */
+#line 1357 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 101 "parser.y" /* yacc.c:1646  */
+#line 102 "parser.y" /* yacc.c:1646  */
     { (yyval.type) = ast_type_new(exception_handler_token_position, AST_INT_TYPE); }
-#line 1362 "parser.tab.c" /* yacc.c:1646  */
+#line 1363 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 103 "parser.y" /* yacc.c:1646  */
+#line 104 "parser.y" /* yacc.c:1646  */
     { (yyval.type) = ast_type_new(exception_handler_token_position, AST_IDENTIFIER_TYPE); }
-#line 1368 "parser.tab.c" /* yacc.c:1646  */
+#line 1369 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 111 "parser.y" /* yacc.c:1646  */
+#line 112 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = ast_statement_list_new((yyvsp[-1].stmt), NULL); }
-#line 1374 "parser.tab.c" /* yacc.c:1646  */
+#line 1375 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 113 "parser.y" /* yacc.c:1646  */
+#line 114 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = ast_statement_list_new((yyvsp[-2].stmt), (yyvsp[0].stmt_list)); }
-#line 1380 "parser.tab.c" /* yacc.c:1646  */
+#line 1381 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 115 "parser.y" /* yacc.c:1646  */
+#line 116 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt_list) = NULL; }
-#line 1386 "parser.tab.c" /* yacc.c:1646  */
+#line 1387 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 119 "parser.y" /* yacc.c:1646  */
+#line 120 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1392 "parser.tab.c" /* yacc.c:1646  */
+#line 1393 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 121 "parser.y" /* yacc.c:1646  */
+#line 122 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1398 "parser.tab.c" /* yacc.c:1646  */
+#line 1399 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 129 "parser.y" /* yacc.c:1646  */
+#line 130 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_assign_stmt(exception_handler_token_position, (yyvsp[-3].type), (yyvsp[-2].string_value), (yyvsp[0].stmt)); }
-#line 1404 "parser.tab.c" /* yacc.c:1646  */
+#line 1405 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 133 "parser.y" /* yacc.c:1646  */
+#line 134 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_op_stmt(exception_handler_token_position, AST_PLUS_OP, (yyvsp[-2].stmt), (yyvsp[0].stmt)); }
-#line 1410 "parser.tab.c" /* yacc.c:1646  */
+#line 1411 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 135 "parser.y" /* yacc.c:1646  */
+#line 136 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_op_stmt(exception_handler_token_position, AST_MINUS_OP, (yyvsp[-2].stmt), (yyvsp[0].stmt)); }
-#line 1416 "parser.tab.c" /* yacc.c:1646  */
+#line 1417 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 137 "parser.y" /* yacc.c:1646  */
+#line 138 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_op_stmt(exception_handler_token_position, AST_TIMES_OP, (yyvsp[-2].stmt), (yyvsp[0].stmt)); }
-#line 1422 "parser.tab.c" /* yacc.c:1646  */
+#line 1423 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 139 "parser.y" /* yacc.c:1646  */
+#line 140 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_op_stmt(exception_handler_token_position, AST_DIVIDE_OP, (yyvsp[-2].stmt), (yyvsp[0].stmt)); }
-#line 1428 "parser.tab.c" /* yacc.c:1646  */
+#line 1429 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 142 "parser.y" /* yacc.c:1646  */
+#line 143 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_op_stmt(exception_handler_token_position, AST_MINUS_OP, ast_int_stmt(exception_handler_token_position, 0) , (yyvsp[0].stmt)); }
-#line 1434 "parser.tab.c" /* yacc.c:1646  */
+#line 1435 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 146 "parser.y" /* yacc.c:1646  */
+#line 147 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1440 "parser.tab.c" /* yacc.c:1646  */
+#line 1441 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 148 "parser.y" /* yacc.c:1646  */
+#line 149 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = (yyvsp[0].stmt); }
-#line 1446 "parser.tab.c" /* yacc.c:1646  */
+#line 1447 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 151 "parser.y" /* yacc.c:1646  */
+#line 152 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_var_stmt(exception_handler_token_position, ast_simple_var(exception_handler_token_position, symbol_table_entry_new((yyvsp[0].string_value)))); }
-#line 1452 "parser.tab.c" /* yacc.c:1646  */
+#line 1453 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 155 "parser.y" /* yacc.c:1646  */
+#line 156 "parser.y" /* yacc.c:1646  */
     { (yyval.stmt) = ast_int_stmt(exception_handler_token_position, (yyvsp[0].int_value)); }
-#line 1458 "parser.tab.c" /* yacc.c:1646  */
+#line 1459 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 159 "parser.y" /* yacc.c:1646  */
+#line 160 "parser.y" /* yacc.c:1646  */
     {}
-#line 1464 "parser.tab.c" /* yacc.c:1646  */
+#line 1465 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 174 "parser.y" /* yacc.c:1646  */
+#line 175 "parser.y" /* yacc.c:1646  */
     {}
-#line 1470 "parser.tab.c" /* yacc.c:1646  */
+#line 1471 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 176 "parser.y" /* yacc.c:1646  */
+#line 177 "parser.y" /* yacc.c:1646  */
     {}
-#line 1476 "parser.tab.c" /* yacc.c:1646  */
+#line 1477 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1480 "parser.tab.c" /* yacc.c:1646  */
+#line 1481 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1704,5 +1705,5 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 180 "parser.y" /* yacc.c:1906  */
+#line 181 "parser.y" /* yacc.c:1906  */
 

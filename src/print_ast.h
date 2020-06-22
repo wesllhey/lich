@@ -7,9 +7,9 @@
 
 #include "ast.h"
 
-void print_ast_dec(
+void pint_ast_stmt_root(
     FILE *out,
-    ast_dec *ast_root,
+    ast_statement *ast_root,
     int spaces);
 
 #endif

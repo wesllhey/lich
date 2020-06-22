@@ -86,6 +86,16 @@ ast_statement *ast_assign_stmt(
     return p;
 }
 
+ast_statement *ast_dec_stmt(
+    ast_dec *dec)
+{
+    ast_statement *p = (ast_statement *)alloc_and_check(sizeof(ast_statement));
+    p->kind = AST_DEC_STMT;
+    p->dec = dec;
+    
+    return p;
+}
+
 /* dec */
 ast_dec *ast_function_dec_new(
     unsigned position,
